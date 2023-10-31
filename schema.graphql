@@ -1,95 +1,24 @@
-type Approval @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  approved: Bytes! # address
-  tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Token @entity {
+  id: ID!
+  tokenID: BigInt!
+  contentURI: String!
+  Name: String
+  Description: String
+  ImageUrl: String
+  Listed: Boolean
+  price: BigInt
+  createdAtTimestamp: BigInt!
+  creator: User
+  owner: User
 }
 
-type ApprovalForAll @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  operator: Bytes! # address
-  approved: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type User @entity {
+  id: ID!
+  tokens: [Token!] @derivedFrom(field: "owner")
+  created: [Token!] @derivedFrom(field: "creator")
 }
 
-type BatchMetadataUpdate @entity(immutable: true) {
-  id: Bytes!
-  _fromTokenId: BigInt! # uint256
-  _toTokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type MetadataUpdate @entity(immutable: true) {
-  id: Bytes!
-  _tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NFTBought @entity(immutable: true) {
-  id: Bytes!
-  seller: Bytes! # address
-  buyer: Bytes! # address
-  tokenId: BigInt! # uint256
-  tokenUri: String! # string
-  price: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NFTCreated @entity(immutable: true) {
-  id: Bytes!
-  creator: Bytes! # address
-  tokenUri: String! # string
-  tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NFTListed @entity(immutable: true) {
-  id: Bytes!
-  seller: Bytes! # address
-  tokenId: BigInt! # uint256
-  price: BigInt! # uint256
-  tokenUri: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NFTTransferred @entity(immutable: true) {
-  id: Bytes!
-  creator: Bytes! # address
-  receiver: Bytes! # address
-  tokenUri: String! # string
-  tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NFTUnlisted @entity(immutable: true) {
-  id: Bytes!
-  seller: Bytes! # address
-  tokenId: BigInt! # uint256
-  tokenUri: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Transfer @entity(immutable: true) {
+type Transfer @entity {
   id: Bytes!
   from: Bytes! # address
   to: Bytes! # address
@@ -97,4 +26,31 @@ type Transfer @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  Name: String
+  Description: String
+  ImageUrl: String
+}
+
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: rank
+    include: [
+      { entity: "Token", fields: [{ name: "Name" }, { name: "Description" }] }
+    ]
+  )
+
+type Buy @entity {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  Name: String
+  Description: String
+  ImageUrl: String
+  price: BigInt
 }
