@@ -117,7 +117,7 @@ export function handleNFTTransferred(event: NFTTransferredEvent): void {
     return;
   }
   token.owner = event.params.receiver.toHexString();
-  token.price = null;
+  token.price = BigInt.fromString("0");
   token.Listed = false;
   token.save();
   let user = User.load(event.params.receiver.toHexString());
@@ -170,5 +170,3 @@ export function handleNFTUnlisted(event: NFTUnlistedEvent): void {
   token.Listed = false;
   token.save();
 }
-
-
